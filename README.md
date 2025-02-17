@@ -1,6 +1,8 @@
 # Competitive-Programming
 ## Antonio da Ressurreição Filho, student in the third semester of Computer Science at the Federal University of Paraná (UFPR).
 
+![](Pictures/myteam.jpg)
+
 # Português:
 
 ## [LINK DO MEU PERFIL NO BEECROWD](https://judge.beecrowd.com/pt/profile/930291)
