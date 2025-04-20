@@ -1,7 +1,7 @@
 # Competitive-Programming
 ## Antonio da Ressurreição Filho, student in the third semester of Computer Science at the Federal University of Paraná (UFPR).
 
-### Members of my team: [Nathaendo](https://github.com/Nathaendo)
+## Members of my team: [Nathaendo](https://github.com/Nathaendo) and [ArthurDDev](https://github.com/ArthurDDev) 
 
 ![](Pictures/myteam.jpg)
 
