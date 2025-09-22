@@ -1,5 +1,5 @@
 # Competitive-Programming
-## Antonio da Ressurreição Filho, student in the third semester of Computer Science at the Federal University of Paraná (UFPR).
+## Antonio da Ressurreição Filho, student in the fourth semester of Computer Science at the Federal University of Paraná (UFPR).
 
 ![](Pictures/myteam.jpg)
 
