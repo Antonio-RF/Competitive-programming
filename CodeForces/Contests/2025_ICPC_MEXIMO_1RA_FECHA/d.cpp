@@ -48,28 +48,49 @@ void solution(){
 	vector<ll> v(k);
 	for (ll &i : v) cin >> i;
 
-	vector<ll> orders(k+1, 0);
 
 	ll n;
 	cin >> n;
+
+	vector<vector<ll>> orders(n, vector<ll>(k));
+	vector<vector<ll>> somas(n, vector<ll>(k));
 
 	for (int i=0 ; i<n ; i++) {
 		for (int j=0 ; j<k ; j++) {
 			ll temp;
 			cin >> temp;
-			orders[j] += temp;
+			orders[i][j] = temp;
+			if (i != 0) somas[i][j] = somas[i-1][j] + temp;
+			else somas[i][j] = temp;
 		}
 	}
 
-	ll minimo = LLONG_MAX;
-	ll resp2 = -1;
+	ll menor = LLONG_MAX;
 	for (int i=0 ; i<k ; i++) {
-		if ((v[i]/orders[i]+1) < minimo) {
-			minimo = (v[i]/orders[i]+1);
-			resp2 = i+1;
-		}
+		if (somas[n-1][i] == 0) continue;
+		menor = min(menor, (v[i]/somas[n-1][i]));
 	}
-	cout << minimo << " " << resp2 << endl;
+	for (ll i=0 ; i<v.size() ; i++) {
+		v[i] -= menor * somas[n-1][i];
+	}
+
+	ll dia = menor+1;
+	while (true) {
+
+		for (ll i=0 ; i<n ; i++) {
+			for (ll j=0 ; j<k ; j++) {
+				if (v[j] < orders[i][j]) {
+					cout << dia << " " << i+1 << endl;
+					return;
+				}
+			}
+
+			for (ll j=0 ; j<k ; j++) {
+				v[j] -= orders[i][j];
+			}
+		}
+		dia++;
+	}
 }
 
 int main() {
