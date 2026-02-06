@@ -40,56 +40,21 @@ struct IO {
 	}
 } io;
 
-set<int> v;
-vector<bool> primo;
-int n;
-
-void crivoErastostenes(int n) {
-	primo[0] = primo[1] = false;
-
-	for (int p=2 ; p*p <= n ; p++) {
-		if (primo[p] == true) {
-			for (int i=p*p ; i<=n ; i++) {
-				primo[i] = false;
-			}
-		}
-	}
-}
-
-int knapsack(int k) {
-	if (find(v.begin(), v.end(),k) != v.end()) return 1;
-	else if (primo[k]) return INF;
-
-	int ans = INF;
-
-	for (int div=2 ; div*div <= k ; div++)
-		if (k % div == 0)
-			ans = min(ans, knapsack(div) + knapsack(k/div));
-
-	return ans;
-}
 
 void solution(){
 	ll t;
 	cin >> t;
 	while(t--) {
-		cin >> n;
-		primo.assign(n+1, true);
-		crivoErastostenes(n);
-		v.assign(n+1, 0);
-		for (int i=0 ; i<n ; i++) {
-			int temp;
-			cin >> temp;
-			v.insert(temp);
-		}
+		ll y, x;
+		cin >> y >> x;
 
-		for (int i=1 ; i<=n ; i++) {
-			int ans = knapsack(i);
-			if (ans >= INF)
-				cout << -1 << " ";
-			else cout << ans << " ";
-		}
-		cout << endl;
+		ll ans = -1;
+		if (x >= y && x%2!=0) ans = x*x-y+1;
+		else if (x>=y && x%2==0) ans = (x-1)*(x-1)+y;
+		else if (y>x && y%2==0) ans = y*y-x+1;
+		else if (y>x && y%2!=0) ans = (y-1)*(y-1)+x;
+
+		cout << ans << endl;
 	}
 }
 

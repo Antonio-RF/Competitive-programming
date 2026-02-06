@@ -40,57 +40,34 @@ struct IO {
 	}
 } io;
 
-set<int> v;
-vector<bool> primo;
-int n;
-
-void crivoErastostenes(int n) {
-	primo[0] = primo[1] = false;
-
-	for (int p=2 ; p*p <= n ; p++) {
-		if (primo[p] == true) {
-			for (int i=p*p ; i<=n ; i++) {
-				primo[i] = false;
-			}
-		}
-	}
-}
-
-int knapsack(int k) {
-	if (find(v.begin(), v.end(),k) != v.end()) return 1;
-	else if (primo[k]) return INF;
-
-	int ans = INF;
-
-	for (int div=2 ; div*div <= k ; div++)
-		if (k % div == 0)
-			ans = min(ans, knapsack(div) + knapsack(k/div));
-
-	return ans;
-}
 
 void solution(){
-	ll t;
-	cin >> t;
-	while(t--) {
-		cin >> n;
-		primo.assign(n+1, true);
-		crivoErastostenes(n);
-		v.assign(n+1, 0);
-		for (int i=0 ; i<n ; i++) {
-			int temp;
-			cin >> temp;
-			v.insert(temp);
-		}
+	ll n, k;
+	cin >> n >> k;
 
-		for (int i=1 ; i<=n ; i++) {
-			int ans = knapsack(i);
-			if (ans >= INF)
-				cout << -1 << " ";
-			else cout << ans << " ";
-		}
-		cout << endl;
+	ll x, a, b, c;
+	cin >> x >> a >> b >> c;
+
+	vector<ll> v(n);
+	v[0] = x;
+	for (ll i=1 ; i<n ; i++) {
+		v[i] = (a*v[i-1] + b) % c;
 	}
+
+	ll l=0;
+	ll cur_sum = 0;
+	ll ans = 0;
+	for (ll r=0 ; r<n ; r++) {
+		cur_sum += v[r];
+
+		while (r-l+1 > k) {
+			cur_sum -= v[l];
+			l++;
+		}
+		if (r-l+1 == k)
+			ans ^= cur_sum;
+	}
+	cout << ans << endl;
 }
 
 int main() {

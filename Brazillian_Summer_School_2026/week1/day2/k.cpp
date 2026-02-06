@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
+
 // Tipos básicos
 using ll = long long;
 using ull = unsigned long long;
@@ -8,19 +8,19 @@ using pii = pair<int,int>;
 using pll = pair<ll,ll>;
 using vi = vector<int>;
 using vll = vector<ll>;
- 
+
 // Constantes comuns
 const int INF = 1e9+7;
 const ll LINF = 1e18;
 const int MOD = 1e9+7;
- 
+
 // Direções para grafos/grelhas
 const int dx4[4] = {-1,0,1,0};
 const int dy4[4] = {0,1,0,-1};
- 
+
 const int dx8[8] = {-1,-1,-1,0,0,1,1,1};
 const int dy8[8] = {-1,0,1,-1,1,-1,0,1};
- 
+
 // Macros rápidos
 #define all(x) (x).begin(),(x).end()
 #define sz(x) ((int)(x).size())
@@ -31,7 +31,7 @@ const int dy8[8] = {-1,0,1,-1,1,-1,0,1};
 #define f first
 #define s second
 #define endl '\n'
- 
+
 // Fast I/O
 struct IO {
 	IO() {
@@ -40,79 +40,63 @@ struct IO {
 	}
 } io;
 
-const int MAX = 2e6 + 5, BLOCK_SIZE= 447, MAXQ = 2e5;
+const int MAXN = 2e5 + 5;
+#define OP(X, Y) min(X,Y)
+#define NEUTRAL LLONG_MAX
+#define FACTOR(sz) (sz)
 
-struct Query {
-	int l, r, idx;
+vector<ll> t(4*MAXN), lazy(4*MAXN), sety(4*MAXN, -1);
 
-	bool operator<(const Query &y) const {
-		int x_block = l/BLOCK_SIZE;
-		int y_block = y.l/BLOCK_SIZE;
 
-		if (x_block == y_block)
-			return r < y.r;
+void build(const vector<ll> &src, int ti=1, int tl=1, int tr=-1) {
 
-		return x_block < y_block;
+	if (tl==tr) {
+		if (tl < src.size()) t[ti] = src[tl];
+		return;
 	}
-};
+	int tm = (tl+tr) / 2;
+	build(src, ti*2, tl, tm);
+	build(src, ti*2+1, tm+1, tr);
+	t[ti] = OP(t[ti*2], t[ti*2+1]);
+}
 
-int final_ans[MAXQ];
-deque<int> freq;
-int  A[MAXQ];
-int cur_ans;
-
-
-void operate(int idx, int delta) {
-	ll x = A[idx];
-
-	if (delta == 1) {
-		while (freq.size() && freq.back() > x) {
-			freq.pop_back();
-		}
-		freq.pb(x);
+void push(int ti, int tl, int tm, int tr) {
+	if (sety[ti] != -1) {
+		t[ti*2] = sety[ti] * FACTOR(tm-tl+1);
+		lazy[ti*2] = 0; sety[ti*2] = sety[ti];
+		t[ti*2+1] = sety[ti]*FACTOR(tr-tm);
+		lazy[ti*2+1] = 0; sety[ti*2+1] = sety[ti];
+		sety[ti] = -1;
 	}
+	t[ti*2] += lazy[ti] * FACTOR(tm-tl+1);
+	lazy[ti*2] += lazy[ti];
+	t[ti*2+1] += lazy[ti] * FACTOR(tr-tm);
+	lazy[ti*2+1] += lazy[ti];
+	lazy[ti] = 0;
+}
 
-	else {
-		if (freq.size() && freq.front() == x)
-			freq.pop_front();
-	}
-
-	cur_ans = freq.front();
+ll op_inclusive(int l, int r, int ti=1, int tl=1, int tr=-1) {
+	if (l>r || tr<l || r<tl) return NEUTRAL;
+	if (l<=tl && tr<=r) return t[ti];
+	int tm = (tl+tr)/2;
+	push(ti, tl, tm, tr);
+	return OP(op_inclusive(l,r,ti*2,tl,tm), op_inclusive(l, r, ti*2+1, tm+1, tr));
 }
 
 void solution(){
-		cur_ans = MAX;
-		ll n, q;
-		cin >> n >> q;
+	ll n, q;
+	cin >> n >> q;
 
-		vector<int> a(n);
-		for (int &i : a) cin >> i;
-
-		for (int i=0 ; i<n ; i++)
-			A[i] = a[i];
-
-		vector<Query> queries(q);
-		for (int i=0 ; i<q ; i++) {
-			cin >> queries[i].l >> queries[i].r;
-			queries[i].l--, queries[i].r--;
-			queries[i].idx = i;
-		}
-		sort(queries.begin(), queries.end());
-
-		int i=0, j=-1;
-		for (const auto[l, r, idx] : queries) {
-			while(j<r) operate(++j, 1);
-			while(i>l) operate(--i, 1);
-
-			while(i<l) operate(i++, -1);
-			while(j>r) operate(j--, -1);
-
-			final_ans[idx] = cur_ans;
-		}
-
-		for (int i=0 ; i<q ; i++) cout << final_ans[i] << endl;
+	vector<ll> v(n+1);
+	for (ll i=1 ; i<=n ; i++) cin >> v[i];
+	build(v, 1, 1, n);
+	while(q--) {
+		ll a, b;
+		cin >> a >> b;
+		cout << op_inclusive(a, b, 1, 1, n) << endl;
+	}
 }
- 
+
 int main() {
     IO io;
 	solution();
