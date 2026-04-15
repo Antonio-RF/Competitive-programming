@@ -47,24 +47,28 @@ void solution(){
 	while(t--) {
 		ll n;
 		cin >> n;
-		vector<ll> v(n+1);
-		map<ll,ll> pos;
-		for (int i=1; i<=n ; i++){
+		vector<ll> v(n);
+		for (int i=0 ; i<n ; i++) {
 			cin >> v[i];
-					pos[v[i]]=i;
+			if (i%2==1) v[i]*=-1;
 		}
 
-		ll k=n;
-		for (int i=1; i<=n ; i++){
-			if (v[i]!=k) {
-				reverse(v.begin()+i, v.begin()+pos[k]+1);
+		ll sum=0;
+		map<ll,ll> mp;
+		mp[0]=1;
+		bool deu=false;
+		for (int i=0 ; i<n ; i++) {
+			sum += v[i];
+
+			if (mp[sum]) {
+				cout << "YES" << endl;
+				deu = true;
 				break;
 			}
-			k--;
+			mp[sum]++;
 		}
-
-		for (int i=1 ; i<=n ;i++) cout << v[i] << " ";
-		cout << endl;
+		if (!deu)
+			cout << "NO" << endl;
 	}
 }
  

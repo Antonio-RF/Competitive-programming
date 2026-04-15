@@ -42,30 +42,28 @@ struct IO {
  
  
 void solution(){
-	ll t;
-	cin >> t;
-	while(t--) {
-		ll n;
-		cin >> n;
-		vector<ll> v(n+1);
-		map<ll,ll> pos;
-		for (int i=1; i<=n ; i++){
-			cin >> v[i];
-					pos[v[i]]=i;
-		}
+	ll n, x;
+	cin >> n >> x;
+	vector<ll> v(n);
+	for (ll &i : v) cin >> i;
 
-		ll k=n;
-		for (int i=1; i<=n ; i++){
-			if (v[i]!=k) {
-				reverse(v.begin()+i, v.begin()+pos[k]+1);
-				break;
-			}
-			k--;
+	sort(v.begin(), v.end());
+	ll ans=0;
+	ll i=0, j=n-1;
+	while(i!=j && i<j) {
+		if (v[i]+v[j]<=x) {
+			ans++;
+			i++;
+			j--;
 		}
-
-		for (int i=1 ; i<=n ;i++) cout << v[i] << " ";
-		cout << endl;
+		else if (v[i]+v[j]>x) {
+			ans++;
+			j--;
+		}
 	}
+	if (i==j)
+		ans++;
+	cout << ans << endl;
 }
  
 int main() {

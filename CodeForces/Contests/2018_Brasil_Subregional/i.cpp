@@ -42,30 +42,48 @@ struct IO {
  
  
 void solution(){
-	ll t;
-	cin >> t;
-	while(t--) {
-		ll n;
-		cin >> n;
-		vector<ll> v(n+1);
-		map<ll,ll> pos;
-		for (int i=1; i<=n ; i++){
-			cin >> v[i];
-					pos[v[i]]=i;
-		}
+	ll n, m;
+	cin >> n >> m;
+ 
+	vector<int> v(m+1, 0);
+	ll l;
+	cin >> l;
+	for (int i=0 ; i<l ; i++) {
+		ll temp;
+		cin >> temp;
+		v[temp] ^= 1;
+	}
 
-		ll k=n;
-		for (int i=1; i<=n ; i++){
-			if (v[i]!=k) {
-				reverse(v.begin()+i, v.begin()+pos[k]+1);
+	vector<int> tam(n);
+	vector<vector<int>> va(n);
+	for (int i=0 ; i<n ; i++) {
+		cin >> tam[i];
+		for (int j=0 ; j<tam[i] ; j++) {
+			int temp; cin >> temp;
+			va[i].pb(temp);
+		}
+	}
+
+	bool deu=true;
+	int guarda=-1;
+	for (int i=0 ; i<2*n ; i++) {
+		for (int j=0 ; j<tam[i%n] ; j++) {
+			v[va[i%n][j]] ^= 1;
+		}
+		//passando:
+		for (int j=1 ; j<=m ; j++) {
+			if (v[j]) {
+				deu = false;
 				break;
 			}
-			k--;
 		}
-
-		for (int i=1 ; i<=n ;i++) cout << v[i] << " ";
-		cout << endl;
+		if (deu && guarda == -1) {
+			guarda = i+1;
+		}
+		deu = true;
 	}
+	if (guarda != -1) cout << guarda << endl;
+	else cout << -1 << endl;
 }
  
 int main() {

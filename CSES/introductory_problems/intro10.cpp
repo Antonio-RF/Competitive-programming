@@ -39,33 +39,23 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
- 
- 
-void solution(){
-	ll t;
-	cin >> t;
-	while(t--) {
-		ll n;
-		cin >> n;
-		vector<ll> v(n+1);
-		map<ll,ll> pos;
-		for (int i=1; i<=n ; i++){
-			cin >> v[i];
-					pos[v[i]]=i;
-		}
 
-		ll k=n;
-		for (int i=1; i<=n ; i++){
-			if (v[i]!=k) {
-				reverse(v.begin()+i, v.begin()+pos[k]+1);
-				break;
-			}
-			k--;
-		}
-
-		for (int i=1 ; i<=n ;i++) cout << v[i] << " ";
-		cout << endl;
+ll int_sqrt(ll x) {
+	ll ans=0;
+	for (ll k=1LL << 30 ; k!=0 ; k/=2) {
+		if ((ans+k) * (ans+k) <= x)
+			ans+=k;
 	}
+	return ans;
+}
+
+void solution(){
+	ll n;
+	cin >> n;
+	ll sq = sqrt(n);
+	cout << sq << endl;
+	if (n<5) cout << 0 << endl;
+	else cout << ((n/5)-1)+sq << endl;
 }
  
 int main() {

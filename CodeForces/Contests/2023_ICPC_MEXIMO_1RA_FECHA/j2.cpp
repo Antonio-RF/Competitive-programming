@@ -40,70 +40,73 @@ struct IO {
 	}
 } io;
 
-const int MAXN = 2e5+5;
-#define OP(X,Y)(X+Y)
-#define NEUTRAL 0
-#define FACTOR(sz) (sz)
-vector<ll> t(4*MAXN), lazy(4*MAXN), sety(4*MAXN, -1);
+const int MAXN = 1e6+5;
+const ll INV2 = 500000004LL;
 
-void build(const vector<int>&src, int ti=1, int tl=1, int tr=-1) {
-	if (tl == tr) {
-		if (tl < src.size()) t[ti] = src[tl];
-		return;
+struct mint{
+	int v;
+	mint(ll _v = 0){ v = int( _v% MOD);if(v<0)v+=MOD;}
+
+	mint& operator += (const mint &o){
+		if((v+=o.v) >= MOD) v-= MOD;
+		return *this;
 	}
-	int tm = (tl+tr)/2;
-	build(src, ti*2, tl, tm);
-	build(src, ti*2+1, tm+1, tr);
-	t[ti] = OP(t[ti*2], t[ti*2+1]);
-}
-
-void push(int ti, int tl, int tm, int tr) {
-	if (sety[ti] != -1) {
-		t[ti*2] = sety[ti]*FACTOR(tm-tl+1);
-		lazy[ti*2] = 0; sety[ti*2] = sety[ti];
-		t[ti*2+1] = sety[ti]*FACTOR(tr-(tm+1)+1);
-		lazy[ti*2+1] = 0; sety[ti*2+1] = sety[ti];
-		sety[ti] = -1;
+	mint& operator -= (const mint &o){
+		if((v-=o.v) < 0) v+= MOD;
+		return *this;
 	}
-	t[ti*2] += lazy[ti] * FACTOR(tm-tl+1);
-	lazy[ti*2] += lazy[ti];
-	t[ti*2+1] += lazy[ti]*FACTOR(tr-(tm+1)+1);
-	lazy[ti*2+1] += lazy[ti];
-	lazy[ti] = 0;
-}
+	mint& operator *= (const mint &o){
+		v = int((ll)v*o.v%MOD);
+		return *this;
+	}
+	friend mint operator +(mint a, const mint &b){ return a += b;}
+	friend mint operator -(mint a, const mint &b){ return a -= b;}
+	friend mint operator *(mint a, const mint &b){ return a *= b;}
 
-ll op_inclusive(int l, int r, int ti=1, int tl=1, int tr=-1) {
-	if (l>r || tr<l || r<tl) return NEUTRAL;
-	if (l<=tl && tr<=r) return t[ti];
-	int tm = (tl+tr)/2;
-	push(ti, tl, tm, tr);
-	return OP(op_inclusive(l,r,ti*2,tl,tm), op_inclusive(l,r,ti*2+1,tm+1,tr));
-}
+	mint pow(ll e) const{
+		mint res = 1, a = *this;
+		for(;e>0;e>>=1,a*=a){
+			if(e&1) res*=a;
+		}
+		return res;
+	}
+
+	mint inv() const{return pow(MOD-2);}
+	mint& operator /= (const mint &o){
+		return *this *= o.inv();
+	}
+	friend mint operator / (mint a,const mint &b){return a /= b;}
+};
 
 void solution(){
 	ll n,q;
 	cin >> n >> q;
 	vector<int> v(n+1);
-	for (int i=1 ; i<=n ; i++) cin >> v[i];
-	build(v,1,1,n);
-	for (int i=0 ; i<q ; i++) {
-		ll a,b;
-		cin >> a >> b;
-		ll valor = op_inclusive(a,b,1,1,n);
-		//cout << "valor: " << valor << endl;
-		if (a==b) {
-			cout << v[a] << endl;
-			continue;
-		}
-		ll ans=0;
-		for (int i=a ; i<b ; i++) {
-			valor -= v[i];
-			ans += (valor*v[i])%MOD;
-		}
-		cout << ans << endl;
+
+	vector<mint> pref1(n+1, 0);
+	vector<mint> pref2(n+1, 0);
+
+	for (int i=1; i<=n ; i++) {
+		ll x;
+		cin >> x;
+		mint m(x);
+		pref1[i] = pref1[i-1] + m;
+		pref2[i] = pref2[i-1] + (m*m);
 	}
+
+	mint inv2 = mint(2).inv();
+	while(q--) {
+		int l,r;
+		cin >> l >> r;
+
+		mint sum = pref1[r]-pref1[l-1];
+		mint sumSq = pref2[r]-pref2[l-1];
+
+		mint ans = (sum*sum - sumSq) * inv2;
+		cout << ans.v << endl;
+	}
+
 }
- 
 int main() {
     IO io;
 	solution();

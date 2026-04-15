@@ -31,7 +31,7 @@ const int dy8[8] = {-1,0,1,-1,1,-1,0,1};
 #define f first
 #define s second
 #define endl '\n'
--
+
 // Fast I/O
 struct IO {
 IO() {
@@ -59,28 +59,49 @@ struct Query {
 
 int final_ans[MAXQ];
 ll A[10005];
-int cur_ans;
+multiset<ll> s, diffs;
+ll cur_ans = LINF;
 
 void operate(int idx, int delta) {
 	ll x=A[idx];
 
-	if (delta==1) cur_ans++;
+	if (delta==1) {
+		auto it = s.insert(x);
+		auto nxt = next(it);
+		auto prv = prev(it);
+		bool pR = (*prv != -LINF), nR = (*nxt != LINF);
 
-	freq[x] += delta;
+		if (pR && nR) {diffs.erase(diffs.find(*nxt - *prv)); diffs.insert(x-*prv); diffs.insert(*nxt - x);}
+		else if (pR) {diffs.insert(x-*prv);}
+		else if (nR) {diffs.insert(*nxt-x);}
+		cur_ans = diffs.empty() ? LINF : *diffs.begin();
+	}
 
-	if (freq[x]==0 && delta==-1) cur_ans--;
+	else {
+		auto it = s.find(x);
+		auto nxt = next(it);
+		auto prv = prev(it);
+		bool pR = (*prv != -LINF), nR=(*nxt != LINF);
+
+		if (pR && nR) { diffs.erase(diffs.find(x - *prv)); diffs.erase(diffs.find(*nxt - x)); diffs.insert(*nxt - *prv); }
+		else if (pR)  { diffs.erase(diffs.find(x - *prv)); }
+		else if (nR)  { diffs.erase(diffs.find(*nxt - x)); }
+
+		s.erase(it);
+		cur_ans = diffs.empty() ? LINF : *diffs.begin();
+
+	}
 }
 
 void solution() {
-	cur_ans=0;
-
+	cur_ans= LINF;
 	ll n;
 	cin >> n;
 	for (int i=0 ; i<n ; i++) cin >> A[i];
 
 	ll q;
 	cin >> q;
-	vector<query>queries(q);
+	vector<Query>queries(q);
 	for (int i=0 ; i<q ; i++) {
 		cin >> queries[i].l >> queries[i].r;
 		queries[i].l--; queries[i].r--;
@@ -102,10 +123,6 @@ void solution() {
 	}
 
 	for (int i=0 ; i<q ; i++) cout << final_ans[i] << endl;
-
-}
-
-void solution(){
 
 }
 

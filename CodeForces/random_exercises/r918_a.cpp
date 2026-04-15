@@ -45,26 +45,12 @@ void solution(){
 	ll t;
 	cin >> t;
 	while(t--) {
-		ll n;
-		cin >> n;
-		vector<ll> v(n+1);
-		map<ll,ll> pos;
-		for (int i=1; i<=n ; i++){
-			cin >> v[i];
-					pos[v[i]]=i;
-		}
+	ll a,b,c;
+	cin >> a >> b >> c;
 
-		ll k=n;
-		for (int i=1; i<=n ; i++){
-			if (v[i]!=k) {
-				reverse(v.begin()+i, v.begin()+pos[k]+1);
-				break;
-			}
-			k--;
-		}
-
-		for (int i=1 ; i<=n ;i++) cout << v[i] << " ";
-		cout << endl;
+	if (a==b) cout << c << endl;
+	else if (b==c) cout << a << endl;
+	else cout << b << endl;
 	}
 }
  

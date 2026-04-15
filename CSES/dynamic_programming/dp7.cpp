@@ -39,33 +39,42 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
- 
- 
+
+ll n,x;
+vector<int> v,w;
+//vector<vector<int>> dp;
+/*
+int knapsack(int i, int cap) {
+	if (i==n || cap==0)
+		return 0;
+
+	if (dp[i][cap] != -1)
+		return dp[i][cap];
+
+	if (w[i]>cap)
+		return dp[i][cap] = knapsack(i+1, cap);
+
+	return dp[i][cap] = max(knapsack(i+1, cap), v[i]+knapsack(i+1, cap-w[i]));
+}*/
+
 void solution(){
-	ll t;
-	cin >> t;
-	while(t--) {
-		ll n;
-		cin >> n;
-		vector<ll> v(n+1);
-		map<ll,ll> pos;
-		for (int i=1; i<=n ; i++){
-			cin >> v[i];
-					pos[v[i]]=i;
-		}
+	cin >> n >> x;
 
-		ll k=n;
-		for (int i=1; i<=n ; i++){
-			if (v[i]!=k) {
-				reverse(v.begin()+i, v.begin()+pos[k]+1);
-				break;
-			}
-			k--;
-		}
+	v.resize(n);
+	w.resize(n);
+	for (int &i : w) cin >> i;
+	for (int &i : v) cin >> i;
 
-		for (int i=1 ; i<=n ;i++) cout << v[i] << " ";
-		cout << endl;
+	vector<vector<int>> dp(n+1, vector<int>(x+1, 0));
+	for (int i=n-1 ; i>=0 ; i--) {
+		for (int cap=0 ; cap<=x ; cap++) {
+			dp[i][cap] = dp[i+1][cap];
+			if (w[i]<=cap)
+				dp[i][cap] = max(dp[i][cap], v[i]+dp[i+1][cap-w[i]]);
+		}
 	}
+
+	cout << dp[0][x] << endl;
 }
  
 int main() {
