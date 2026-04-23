@@ -40,6 +40,22 @@ struct IO {
 	}
 } io;
 
+// i mod 4 == 3 <=> pref[i]==0;
+ll count_zeros(ll lim){
+	if(lim < 0) return 0;
+	ll cnt = lim/4;
+	if(lim%4 >= 3) cnt++;
+	cnt++;
+	return cnt;
+}
+
+ll count_ones(ll lim){
+	if(lim < 0) return 0;
+	ll cnt = lim/4;
+	if(lim%4 >= 1) cnt++;
+	return cnt;
+}
+
 void solution(){
 	ll t;
 	cin >> t;
@@ -47,21 +63,14 @@ void solution(){
 		ll n, x;
 		cin >> n >> x;
 
-		map<ll,ll> freq;
-		ll sum=1;
-		freq[1]++;
-		ll ans=0;
-		for (int i=2 ; i<=n ; i++) {
-			ll temp = (sum^i)%998244353;
-			//cout << "temp: " << temp << endl;
+		ll l0 = count_zeros(x-1);
+		ll l1 = count_ones(x-1);
 
-			if (i>=x) {
-				if (temp==0) ans++;
-				ans += freq[temp];
-			}
-			freq[temp]++;
-			sum ^= i%998244353;
-		}
+		ll r0 = count_zeros(n) - l0;
+		ll r1 = count_ones(n) - l1;
+
+		ll ans = ((l0 % 998244353) * (r0 % 998244353) + (l1 % 998244353) * (r1 % 998244353)) % 998244353;
+
 		cout << ans << endl;
 	}
 }
