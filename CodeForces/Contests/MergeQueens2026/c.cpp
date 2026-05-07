@@ -42,21 +42,37 @@ struct IO {
  
  
 void solution(){
-	vector<ll> v;
-	for (ll i=0 ; i<=100005 ; i++){
-		v.pb(i*i);
+	ll n;
+	cin >> n;
+	vector<ll> v1(n), v2(n);
+	for (ll &i : v1) cin >> i;
+	for (ll &i : v2) cin >> i;
+
+	vector<ll> copiav1=v1;
+	vector<ll> copiav2=v2;
+
+	sort(copiav1.begin(), copiav1.end());
+	sort(copiav2.begin(), copiav2.end());
+	bool deu=true;
+	map<ll,vector<ll>> freq;
+	ll ref = copiav2[n-1]+copiav1[0];
+	for (int i=0 ; i<n ; i++)  {
+		if (copiav1[i]+copiav2[n-1-i]!=ref) {
+			deu = false;
+			break;
+		}
+		freq[copiav2[n-1-i]].push_back(copiav1[i]);
 	}
-
-	ll t;
-	cin >> t;
-	while(t--) {
-		ll l,r;
-		cin >> l >> r;
-		ll ans = (ll)sqrt((double)r) - (ll)sqrt((double)(l-1));
-
-		cout << ans << endl;
+	if (!deu) cout << "NAO" << endl;
+	else {
+		cout << "SIM" << endl;
+		for (int i=0 ; i<n ; i++) {
+    		auto &vec = freq[v2[i]];
+    		cout << vec.back() << " ";
+			vec.pop_back();
+		}
+		cout << endl;
 	}
-
 }
  
 int main() {
