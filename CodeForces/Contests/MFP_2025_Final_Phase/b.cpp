@@ -28,7 +28,6 @@ const int dy8[8] = {-1,0,1,-1,1,-1,0,1};
 #define eb emplace_back
 #define mp make_pair
 #define mt make_tuple
-#define f first
 #define s second
 #define endl '\n'
  
@@ -39,32 +38,61 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
- 
- 
+
+vector<ll> v;
+ll n;
+
+/*
+vector<vector<ll>> dp;
+ll f(int i, int estado) {
+    if (i>=n) return 0;
+
+    if (dp[i][estado]!=-1) return dp[i][estado];
+
+    if (estado==0) {
+        ll a = v[i] + f(i+1, 1);
+        ll b;
+        if (i+1<n) b = v[i]+v[i+1]+f(i+2, 1);
+        else b = a;
+        return dp[i][estado]=max(a, b);
+    }
+    
+    ll a = f(i+1, 0);
+    ll b;
+    if (i+1<n) b = f(i+2, 0);
+    else b = a;
+    return dp[i][estado]=min(a,b);
+}*/
+
 void solution(){
     ll t;
     cin >> t;
     while(t--) {
-        ll n;
         cin >> n;
-        vector<ll> v(n);
+        v.resize(n);
         for (ll &i : v) cin >> i;
 
-        ll count=0;
-        ll ans=0;
-        while(count <= n-5) {
-            if (v[count]+v[count+1] >= v[count+2]+v[count+3])
-                ans += v[count]+v[count+1];
-            else ans += v[count+2]+v[count+3];
+        //dp.assign(n+1, vector<ll>(2, -1));
+        //cout << f(0, 0) << endl;
 
-            count+=4;
+        vector<vector<ll>> dp(n+2, vector<ll> (2, 0));
+        for (int i=n-1 ; i>=0 ; i--) {
+            ll pega1 = v[i]+dp[i+1][1];
+            ll pega2;
+            if (i+1 < n)
+                pega2 = v[i]+v[i+1]+dp[i+2][1];
+            else pega2 = pega1;
+            dp[i][0] = max(pega1, pega2);
+
+            ll oda1 = dp[i+1][0];
+            ll oda2;
+            if (i+1<n)
+                oda2 = dp[i+2][0];
+            else oda2 = oda1;
+            dp[i][1] = min(oda1, oda2);
         }
-
-        if (((n-1)-count+1) == 1) ans += v[count];
-        else if (((n-1)-count+1) == 2 || ((n-1)-count+1) == 3) ans += v[count]+v[count+1];
-
-        cout << ans << endl;
-    }
+        cout << dp[0][0] << endl;
+        }
 }
  
 int main() {
