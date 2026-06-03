@@ -39,13 +39,14 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
 const int N = 2*1e5 + 5;
-
-
+ 
+ 
+vector<ll> ms;
 vector<vector<pair<ll,ll>>> g(N);
 bool pertence[N];
-
+ 
 //dfs para calcular caminho fechado
 ll ans = 0;
 bool explore(ll u, ll p) {
@@ -61,62 +62,59 @@ bool explore(ll u, ll p) {
 	if(okay || pertence[u]) return true;
 	return false;
 }
-
+ 
 void solution(){
 	ll n, m;
 	cin >> n >> m;
-
-	vector<ll> ms;
+ 
+	ms.resize(m+1);
+	
 	for (ll i=0 ; i<m ; i++) {
 		ll temp;
 		cin >> temp;
-		ms.pb(temp);
+		ms[i]= temp;
 		pertence[temp]=true;
 	}
-
+ 
 	for (int i=0 ; i<n-1 ; i++) {
 		int k1, k2, di;
 		cin >> k1 >> k2 >> di;
 		g[k1].pb({k2,di});
 		g[k2].pb({k1, di});
 	}
-
+ 
 	vector<ll> dist(n+1, LINF);
 	dist[1]=0;
-	priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<>> pq;
-	vector<bool> processed(N, false);
+	priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>> pq;
 	pq.push({0,1});
 	while(!pq.empty()) {
-		ll a = pq.top().second;
+		auto [d,u] = pq.top();
 		pq.pop();
-		if (processed[a]) continue;
-		processed[a]=true;
-		for (auto u : g[a]) {
-			ll b = u.first;
-			ll w = u.second;
-			if (dist[a]+w <dist[b]) {
-				dist[b] = dist[a]+w;
-				pq.push({-dist[b], b});
+		if (d > dist[u]) continue;
+		for (auto [v, w] : g[u]) {
+			if (dist[v] > d+w) {
+				dist[v] = d+w;
+				pq.push({dist[v], v});
 			}
 		}
 	}
-
+ 
 	explore(1, 0);
 	
 	//tem que multiplicar por 2 (ida e volta)
 	ans = 2*ans;
-
+ 
 	ll maior = LLONG_MIN;
-
+ 
 	//cout << "ans: " << ans << endl;
-
-	for (auto k: ms)
-		maior = max(maior, dist[k]);
-
+ 
+	for (int i=1 ; i<=n ; i++)
+		if (pertence[i]) maior = max(maior, dist[i]);
+	
 	ans -= maior;
 	cout << ans << endl;
-
-
+ 
+ 
 }
  
 int main() {
@@ -124,4 +122,3 @@ int main() {
 	solution();
 	return 0;
 }
-
