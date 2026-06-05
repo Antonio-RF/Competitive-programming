@@ -39,54 +39,25 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
-vector<vector<int>> g;
-vector<int> visited;
-
-bool eh_bipartido(int r) {
-	visited[r] = 0;
-	queue<int> q;
-	q.push(r);
-	while(!q.empty()) {
-		int f = q.front(); q.pop();
-		for (int k : g[f]) {
-			if (visited[k] == -1) {
-				q.push(k);
-				visited[k]=visited[f] ^ 1;
-			}
-			else if (visited[k] == visited[f])
-				return false;
-		}
-	}
-	return true;
-}
-
+ 
+ 
 void solution(){
-	ll n, m;
-	cin >> n >> m;
+    ll n;
+    cin >> n;
 
-	g.resize(n+1, {});
-	visited.assign(n, -1);
-	for (int i=0 ; i<m ; i++) {
-		ll a,b;
-		cin >> a >> b;
-		a--; b--;
-		g[a].pb(b);
-		g[b].pb(a);
-	}
+    vector<ll> v(n);
+    ll sum=0;
+    for (int i=0 ; i<n ; i++) {
+        cin >> v[i];
+        sum += v[i];
+    }
 
-	for (int i=0 ; i<n ; i++) {
-		if (visited[i] == -1) {
-			if (!eh_bipartido(i)) {
-				cout << "IMPOSSIBLE" << endl;
-				return;
-			}
-		}
-	}
+    ll ans = v[0];
+    for (int i=1 ; i<n ; i++) {
+        ans = gcd(ans, v[i]);
+    }
+    cout << sum/ans << endl;
 
-	for (int i=0 ; i<n ; i++)
-		cout << visited[i]+1 << " ";
-	cout << endl;
 }
  
 int main() {
@@ -94,5 +65,3 @@ int main() {
 	solution();
 	return 0;
 }
- 
-
