@@ -39,54 +39,61 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n, k;
+		cin >> n >> k;
+		vector<ll> v(n);
+		for (ll &i : v) cin >> i;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
-
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+		sort(v.begin(), v.end());
+		ll menor = v[0];
+		bool deu=false;
+		for (ll i=1 ; i<n ; i++) {
+			if ((v[i]-menor) > k) {
+				ll tam1 = i+1;
+				ll tam2 = (n-1)-i+1;
+				if (tam1%2==0 || tam2%2==0) {
+					cout << "YES" << endl;
+					deu = true;
+					break;
+				}
+				else {
+					cout << "NO" << endl;
+					deu = true;
+					break;
+				}
+			}
 		}
-		else {
-			auto y = pq.top(); pq.pop();
 
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
+		if (!deu) {
+			if (n%2==0)
+				cout << "YES" << endl;
+			else
+				cout << "NO" << endl;
 		}
-	}
-	cout << ans << endl;
 
+	}
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

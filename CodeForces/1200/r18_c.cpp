@@ -39,54 +39,49 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll n;
+	cin >> n;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
+	vector<ll> v(n);
+	for (ll &i : v) cin >> i;
 
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
+	vector<ll> ps(n+1);
+	ps[0]=0;
+	for (int i=0 ; i<n-1 ; i++)
+		ps[i+1] = ps[i]+v[i];
+
+	reverse(v.begin(), v.end());
+	vector<ll> ss(n+1);
+	ss[0]=0;
+	for (int i=0 ; i<n-1 ; i++)
+		ss[i+1] = ss[i]+v[i];
+	reverse(ss.begin(), ss.end());
+
+	ll ans=0;
+	for (int i=1 ; i<n ; i++) {
+		if (ps[i]==ss[i])ans++;
 	}
 
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
-		}
-		else {
-			auto y = pq.top(); pq.pop();
-
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
-		}
-	}
 	cout << ans << endl;
-
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

@@ -39,54 +39,52 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n, m;
+		cin >> n >> m;
+		vector<ll> a(n), b(m);
+		for (ll &i : a) cin >> i;
+		for (ll &i : b) cin >> i;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
+		sort(a.begin(), a.end());
+		sort(b.begin(), b.end());
 
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+		ll ini=0;
+		ll fim=m-1;
+		ll ans=0;
+		for (int i=0 ; i<n ; i++) {
+			if (abs(a[i]-b[ini]) >= abs(a[i]-b[fim])) {
+				ans += abs(a[i]-b[ini]);
+				ini++;
+			}
+			else {
+				ans += abs(a[i]-b[fim]);
+				fim--;
+			}
 		}
-		else {
-			auto y = pq.top(); pq.pop();
-
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
-		}
+		cout << ans << endl;
 	}
-	cout << ans << endl;
-
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

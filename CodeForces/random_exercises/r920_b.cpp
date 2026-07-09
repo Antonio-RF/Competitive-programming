@@ -39,54 +39,58 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
+		string s, f;
+		cin >> s >> f;
 
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
+		ll sum1=0;
+		for (ll i=0 ; i<n ; i++)
+			if (s[i]=='1' && f[i]=='0') sum1++;
 
 
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
+		ll ans=0;
+		for (ll i=0 ; i<n ; i++) {
 
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+			if (s[i]=='0' && f[i]=='1' && sum1>0) {
+				sum1--;
+			}
+			else if (s[i]=='0' && f[i]=='1' && sum1==0) {
+				ans++;
+			}
+			else if (s[i]=='1' && f[i]=='0') {
+				ans++;
+			}
 		}
-		else {
-			auto y = pq.top(); pq.pop();
 
-			ans += y.s;
-			y.f--;
+		cout << ans << endl;
 
-			if (y.f) pq.push(y);
-			pq.push(x);
-		}
+
+
 	}
-	cout << ans << endl;
-
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

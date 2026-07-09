@@ -39,54 +39,63 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n, k;
+		cin >> n >> k;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
-
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+		map<ll,ll> freqs;
+		vector<ll> t;
+		for (int i=0 ; i<n ; i++) {
+			ll temp; cin >> temp;
+			ll div = temp/k;
+			temp = temp-(k*div);
+			freqs[temp]++;
 		}
-		else {
-			auto y = pq.top(); pq.pop();
-
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
+		for (int i=0 ; i<n ; i++) {
+			ll temp; cin >> temp;
+			ll div = temp/k;
+			temp = temp-(k*div);
+			t.pb(temp);
 		}
-	}
-	cout << ans << endl;
 
+		bool deu=true;
+		for (int i=0 ; i<n ; i++) {
+			if(freqs[t[i]]>0) {
+				freqs[t[i]]--;
+			}
+			else if (freqs[abs(t[i]-k)]>0) {
+				freqs[abs(t[i]-k)]--;
+			}
+			else {
+				deu = false;
+				break;
+			}
+		}
+
+		if (deu) cout << "YES" << endl;
+		else cout << "NO" << endl;
+	}
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

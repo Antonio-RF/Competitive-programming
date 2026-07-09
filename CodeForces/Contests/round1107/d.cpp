@@ -39,54 +39,56 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
+		vector<ll> a(n), b(n);
+		for (ll &i : a) cin >> i;
+		for (ll &i : b) cin >> i;
 
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+		for (int i=1 ; i<n ; i++) {
+			//if (a[i]>b[i]) {
+				//a[i-1] += a[i]-b[i];
+				//a[i] = b[i];
+			//}
+			ll cnt=i;
+			while(cnt>0 && a[cnt]>b[cnt]) {
+				a[cnt-1] += a[cnt]-b[cnt];
+				a[cnt] = b[cnt];
+				cnt--;
+			}
 		}
-		else {
-			auto y = pq.top(); pq.pop();
 
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
+		bool deu=true;
+		for (int i=0 ; i<n ; i++) {
+			if (a[i]>b[i]) deu=false;
 		}
-	}
-	cout << ans << endl;
 
+		if (deu) cout << "YES" << endl;
+		else cout << "NO" << endl;
+	}
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

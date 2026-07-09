@@ -39,54 +39,64 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n, k;
+		cin >> n >> k;
+		vector<ll> v(n);
+		for (ll &i : v) cin >>i;
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
+		vector<vector<ll>> pos(k+1);
+		for (int i=0 ; i<n ; i++) pos[v[i]].pb(i);
 
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
+		ll ans=LLONG_MAX;
+		for (int c=1; c<=k ; c++) {
+			vector<ll> gaps;
+			if (pos[c].empty())
+				gaps.pb(n-1);
+			else {
+				gaps.pb(pos[c][0]); //borda esquerda
+				for (ll j=1 ; j<pos[c].size() ; j++)
+					gaps.pb(pos[c][j] - pos[c][j-1]-1);
+				gaps.pb(n-1-pos[c].back); //borda direita
+			}
 
 
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
+			ll b1=-1, b2=-1;
+			for (ll g : gaps) {
+				if (g > b1) {
+					b2 = b1;
+					b1 = g;
+				}
+				else if (g>b2) b2 = g;
+			}
 
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+			ll cur = max(b2, b1/2);
+			ans = min(ans, cur);
 		}
-		else {
-			auto y = pq.top(); pq.pop();
+		cout << ans << endl;
 
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
-		}
 	}
-	cout << ans << endl;
-
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

@@ -40,53 +40,67 @@ struct IO {
 	}
 } io;
 
+int R, C;
+vector<vector<char>> grid;
+ll ans=LLONG_MAX;
+
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
+	cin >> R >> C;
+	grid.assign(R, vector<char> (C));
 
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
-
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
-		}
-		else {
-			auto y = pq.top(); pq.pop();
-
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
+	ll r, c;
+	for (int i=0 ; i<R ; i++) {
+		for (int j=0 ; j<C ; j++) {
+			cin >> grid[i][j];
+			if (grid[i][j]=='S') {
+				r=i;
+				c=j;
+			}
 		}
 	}
-	cout << ans << endl;
 
+	queue<pair<int,int>> q;
+	vector<vector<int>> dist(R, vector<int> (C, -1));
+	dist[r][c]=0;
+	q.push({r,c});
+	while(!q.empty()) {
+		auto [x,y] = q.front();
+		q.pop();
+
+		if (grid[x][y] == 'E') {
+			cout << dist[x][y] << endl;
+			return;
+		}
+
+		for (int d=0 ; d<4 ; d++) {
+			int nx = x+dx4[d];
+			int ny = y+dy4[d];
+
+			if (nx<0 || nx>=R || ny<0 || ny>=C) continue;
+			if (dist[nx][ny] != -1) continue;
+
+			if (grid[nx][ny] == '.' || grid[nx][ny]=='E') {
+				dist[nx][ny] = dist[x][y]+1;
+				q.push({nx,ny});
+			}
+		}
+	}
+	cout << -1 << endl;
 }
-     
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

@@ -39,54 +39,70 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
-
+ 
+ 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
-
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
-
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
+		ll l=0, r=n-1, cur=0;
+		vector<bool> v(n+1, false);
+		vector<ll>ans;
+		bool deu=true;
+		for (int i=0 ; i<n ; i++) {
+			if (i%2==0) {
+				cur = l+(n-cur);
+				//cout << "cur1: " << cur << endl;
+				if (!v[cur]) {
+					v[cur]=true;
+					ans.pb(cur);
+				}
+				else {
+					deu = false;
+					break;
+				}
+				cur = l;
+				l++;
+			}
+			else {
+				cur = ((r-cur)+n)%n;
+				//cout << "cur2: " << cur << endl;
+				if (!v[cur]) {
+					v[cur]=true;
+					ans.pb(cur);
+				}
+				else {
+					deu = false;
+					break;
+				}
+				cur = r;
+				r--;
+			}
 		}
+		if (!deu) cout << -1 << endl;
 		else {
-			auto y = pq.top(); pq.pop();
-
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
+			for (int i=0 ; i<n ; i++) cout << ans[i] << " ";
+			cout << endl;
 		}
 	}
-	cout << ans << endl;
-
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+

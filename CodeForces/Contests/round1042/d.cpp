@@ -41,52 +41,56 @@ struct IO {
 } io;
 
 void solution(){
-    vector<pair<ll, char>> v;
-    ll a, vi, z;
-    cin >> a >> vi >> z;
-
-    v.pb(make_pair(a, 'A'));
-    v.pb(make_pair(vi, 'V'));
-    v.pb(make_pair(z, 'Z'));
-
-	ll maior = max({a,vi,z});
-	if (maior > (a+vi+z+1)/2) {
-		cout << "F" << endl;
-		return;
-	}
-
-
-	priority_queue<pair<ll,char>> pq;
-	if (a) pq.push({a, 'A'});
-	if (vi) pq.push({vi, 'V'});
-	if (z) pq.push({z, 'Z'});
-
-	string ans;
-	while(!pq.empty()) {
-		auto x = pq.top(); pq.pop();
-
-		if (ans.empty() || ans.back() != x.s) {
-			ans += x.s;
-			x.f--;
-			if (x.f) pq.push(x);
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
+		map<ll,ll> freq;
+		vector<vector<ll>> g(n+1);
+		for (int i=0 ; i<n-1 ; i++) {
+			ll a,b;
+			cin >> a >> b;
+			a--; b--;
+			g[a].pb(b); g[b].pb(a);
+			freq[a]++; freq[b]++;
 		}
-		else {
-			auto y = pq.top(); pq.pop();
 
-			ans += y.s;
-			y.f--;
-
-			if (y.f) pq.push(y);
-			pq.push(x);
+		if (n<=3) {
+			cout << 0 << endl;
+			continue;
 		}
-	}
-	cout << ans << endl;
 
+		ll folha=0;
+		for (int i=0 ; i<n ; i++)
+			if (freq[i]==1) folha++;
+
+		ll mx=0;
+		for (int i=0 ; i<n ; i++) {
+			ll count=0;
+			for (ll v: g[i]) if (freq[v]==1) count++;
+			mx = max(mx, count);
+		}
+
+		cout << folha-mx << endl;
+
+	}
 }
-     
+ 
 int main() {
     IO io;
 	solution();
 	return 0;
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+
