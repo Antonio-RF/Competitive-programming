@@ -39,36 +39,23 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
- 
- 
+
 void solution(){
-	ll t;
-	cin >> t;
-	while(t--) {
-		ll n, m;
-		cin >> n >> m;
-		vector<ll> a(n), b(m);
-		for (ll &i : a) cin >> i;
-		for (ll &i : b) cin >> i;
+	ll n, x, k;
+	cin >> n >> k >> x;
 
-		sort(a.begin(), a.end());
-		sort(b.begin(), b.end());
-
-		ll ini=0;
-		ll fim=m-1;
-		ll ans=0;
-		for (int i=0 ; i<n ; i++) {
-			if (abs(a[i]-b[ini]) >= abs(a[i]-b[fim])) {
-				ans += abs(a[i]-b[ini]);
-				ini++;
-			}
-			else {
-				ans += abs(a[i]-b[fim]);
-				fim--;
-			}
-		}
-		cout << ans << endl;
+	vector<ll> d (n+5, 0);
+	for (int i = 0; i < n; i ++) {
+		ll a, b;
+		cin >> a >> b;
+		d[i] = b-a;
 	}
+
+	for (int i = n-1; i >= 0; i --)
+		d[i] = max(d[i+1] + d[i], d[min(i+k, n)]-x);
+
+	cout << max((ll)0, d[0]) << endl;
+
 }
  
 int main() {
@@ -76,15 +63,5 @@ int main() {
 	solution();
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
+ 
 

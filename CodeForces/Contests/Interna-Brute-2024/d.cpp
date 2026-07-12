@@ -39,20 +39,20 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
- 
- 
-void solution(){
-	ll n, m;
-	cin >> n >> m;
 
-	vector<vector<ll,ll>>> g(n);
-	for (int i=0 ; i<m ; i++) {
-		ll k1, k2, di;
-		cin >> k1 >> k2 >> di;
-		k1--; k2--;
-		g[k1].pb({k2, di});
-		g[k2].pb({k1, di});
-	}
+void solution(){
+	int a;
+	cin >> a;
+	vector<int> v (a);
+
+	for (auto &x : v)
+		cin >> x;
+	
+	int h = 0;
+	for (int i = a-1; i >= 0; i --)
+		h = max(h+1, v[i]+2);
+
+	cout << h << endl;
 }
  
 int main() {
@@ -60,15 +60,5 @@ int main() {
 	solution();
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
+ 
 
