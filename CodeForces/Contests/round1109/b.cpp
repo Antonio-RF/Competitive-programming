@@ -42,29 +42,36 @@ struct IO {
  
  
 void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
+		vector<ll> v(n);
+		for (ll &i : v) cin >> i;
 
-	sort(v.begin(), v.end());
+		ll acumula=0;
+		bool deu=true;
+		for (int i=0 ; i<n ; i++) {
+			if (v[i]>(i+1)) {
+				acumula += v[i]-(i+1);
+				v[i] = i+1;
+			}
 
-	vector<ll> ans(n);
+			if (v[i]<(i+1)) {
+				acumula -= (i+1)-v[i];
+				v[i] = (i+1);
+			}
 
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
+			if (acumula<0) {
+				deu=false;
+				break;
+			}
+		}
+
+		if (deu) cout << "YES" << endl;
+		else cout << "NO" << endl;
 	}
-
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
-	}
-	cout << endl;
 }
  
 int main() {

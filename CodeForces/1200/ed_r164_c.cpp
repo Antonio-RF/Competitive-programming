@@ -42,29 +42,51 @@ struct IO {
  
  
 void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
+	ll t;
+	cin >> t;
+	while(t--) {
+		string s1, s2;
+		cin >> s1 >> s2;
 
-	sort(v.begin(), v.end());
+		bool maior_s1=true;
+		ll pos_maior=-1;
+		for (int i=0 ; i<s1.size() ; i++) {
+			int k1 = s1[i]-'0';
+			int k2 = s2[i]-'0';
+			if (k1!=k2) {
+				if (k1>k2) {
+					pos_maior=i;
+					break;
+				}
+				else {
+					maior_s1=false;
+					pos_maior=i;
+					break;
+				}
+			}
+		}
 
-	vector<ll> ans(n);
-
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
+		if (maior_s1) {
+			for (int i=pos_maior+1 ; i<s1.size() ; i++) {
+				int k1 = s1[i]-'0';
+				int k2 = s2[i]-'0';
+				if (k1>k2) {
+					swap(s1[i], s2[i]);
+				}
+			}
+		}
+		else {
+			for (int i=pos_maior+1 ; i<s1.size() ; i++) {
+				int k1 = s1[i]-'0';
+				int k2 = s2[i]-'0';
+				if (k1<k2) {
+					swap(s1[i], s2[i]);
+				}
+			}
+		}
+		cout << s1 << endl;
+		cout << s2 << endl;
 	}
-
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
-	}
-	cout << endl;
 }
  
 int main() {

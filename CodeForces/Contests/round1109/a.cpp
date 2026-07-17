@@ -42,29 +42,30 @@ struct IO {
  
  
 void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
+		string s;
+		cin >> s;
 
-	sort(v.begin(), v.end());
+		ll maior=0, cur=0;
+		for (int i=0 ; i<n ; i++) {
+			if (s[i]=='#') {
+				cur++;
+				maior = max(maior, cur);
+			}
+			else {
+				cur=0;
+			}
+		}
 
-	vector<ll> ans(n);
-
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
+		if (maior%2==0)
+			cout << maior/2 << endl;
+		else
+			cout << (maior/2)+1 << endl;
 	}
-
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
-	}
-	cout << endl;
 }
  
 int main() {

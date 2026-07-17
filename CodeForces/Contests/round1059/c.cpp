@@ -39,34 +39,54 @@ struct IO {
 		cin.tie(nullptr);
 	}
 } io;
- 
- 
-void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
 
-	sort(v.begin(), v.end());
-
-	vector<ll> ans(n);
-
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
+ll MODI=1e9+7;
+ll power(ll base, ll expo) {
+	ll ans=1;
+	base %= MODI;
+	while(expo) {
+		if (expo & 1LL)
+			ans = (ans*base)%MODI;
+			base = (base*base)%MODI;
+			expo >>= 1LL;
 	}
-
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
-	}
-	cout << endl;
+	return ans;
 }
- 
+
+void solution(){
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll a, b;
+		cin >> a >> b;
+
+		bitset<64> num1(a);
+		bitset<64> num2(b);
+
+		if (__builtin_clz(a) > __builtin_clz(b)) cout << "-1" << endl;
+		else if (a == b) cout << 0 << endl;
+		else {
+
+			vector<ll> val;
+			for (int i=0 ; i<31 ; i++) {
+				ll k = (1<<i);
+				if (a>=k && (a&k)==0) {
+					a += k;
+					val.pb(k);
+				}
+			}
+
+			for (int i=0 ; i<31 ; i++) {
+				ll k = (1<<i);
+				if (k<=a && (b&k)==0)
+					val.pb(k);
+			}
+			cout << val.size() << endl;
+			for (auto k : val) cout << k << " ";
+			cout << endl;
+		}
+	}
+}
 int main() {
     IO io;
 	solution();

@@ -42,27 +42,26 @@ struct IO {
  
  
 void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
-
-	sort(v.begin(), v.end());
-
-	vector<ll> ans(n);
-
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
+	ll n, x;
+	cin >> n >> x;
+	vector<ll> v(x);
+	for (int i=0 ; i<x ;i++) {
+		cin >> v[i];
 	}
 
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
+	vector<ll> ordenado = v;
+	sort(ordenado.begin(), ordenado.end());
+	ordenado.pb(n+1);
+
+	map<ll,ll> ans;
+	ll maior=0;
+	for (int i=x-2 ; i>=0 ; i--) {
+		maior = max(maior, ordenado[i+1]-ordenado[i]-1);
+		ans[ordenado[i]]=maior;
+	}
+
+	for (int i=0 ; i<x ; i++) {
+		cout << ans[v[i]] << " ";
 	}
 	cout << endl;
 }

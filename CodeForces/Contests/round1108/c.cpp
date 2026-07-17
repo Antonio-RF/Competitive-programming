@@ -40,36 +40,48 @@ struct IO {
 	}
 } io;
 
-const int MAXN=2e5+5;
-ll ans=0;
-vector<ll> v(MAXN);
-ll n;
-fi(int i, ll val) {
-	if (i==n || val<0) return 0;
-
-	if (val==0) ans++;
-
-	fi(i+1, val);
-	fi(i+1, val-v[i]);
-	fi(i+1, val+v[i]);
+ll MODI = 1e9+7;
+ll MODF = MODI-1;
+ll power(ll base, ll expo) {
+	ll ans=1;
+	base %= MODI;
+	while(expo) {
+		if (expo & 1LL)
+			ans = (ans*base)%(MODI);
+		base = (base*base)%MODI;
+		expo >>= 1LL;
+	}
+	return ans;
 }
 
 void solution(){
 	ll t;
 	cin >> t;
 	while(t--) {
+		ll n;
 		cin >> n;
 
-		ans=0;
-
 		vector<ll> v(n);
-		ll sum=0;
+		set<ll> st;
+		bool tem_menos_um=false;
 		for (int i=0 ; i<n; i++) {
 			cin >> v[i];
-			ll sum+=v[i];
+			st.insert(v[i]);
+			if (v[i]==-1) tem_menos_um=true;
 		}
 
-		fi(0, sum);
+		ll expo = n-st.size();
+
+		ll temp=0;
+		if (tem_menos_um) {
+			sort(v.begin(), v.end());
+			for (int i=0 ; i<n-1 ; i++) {
+				if (v[i]+1==v[i+1]) temp++;
+			}
+		}
+
+		ll ans = power(2, expo);
+		ans = ans * (temp+1)%MODI;
 		cout << ans << endl;
 
 	}

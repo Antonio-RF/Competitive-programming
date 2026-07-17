@@ -42,29 +42,32 @@ struct IO {
  
  
 void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n,x,y;
+		cin >> n >> x >> y;
+		vector<ll> v(n);
+		map<ll,ll> pos;
 
-	sort(v.begin(), v.end());
+		for (int i=0 ; i<n ; i++) {
+			cin >> v[i];
+			pos[v[i]]=i;
+		}
 
-	vector<ll> ans(n);
+		sort(v.begin(), v.end());
+		bool deu=true;
+		ll g = gcd(x,y);
+		for (int i=0 ; i<n ; i++) {
+				if ((abs(pos[v[i]]-i))%g!=0) {
+					deu=false;
+					break;
+				}
+		}
 
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
+		if (deu) cout << "YES" << endl;
+		else cout << "NO" << endl;
 	}
-
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
-	}
-	cout << endl;
 }
  
 int main() {

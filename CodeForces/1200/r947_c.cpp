@@ -42,29 +42,29 @@ struct IO {
  
  
 void solution(){
-	ll n;
-	cin >> n;
-	vector<ll> v(n);
-	for (ll &i : v) cin >> i;
+	ll t;
+	cin >> t;
+	while(t--) {
+		ll n;
+		cin >> n;
 
-	sort(v.begin(), v.end());
+		vector<ll> v(n+1);
+		for (int i=1; i<=n ; i++) cin >> v[i];
 
-	vector<ll> ans(n);
+		if (n==2) cout << min(v[1], v[2]) << endl;
+		else {
+			ll ans=min(v[1], v[2]);
+			for (int i=1 ; i<=n-2 ; i++) {
+				vector<ll> tmp;
+				for (int k=0 ; k<=2 ; k++)
+					tmp.pb(v[i+k]);
+				sort(tmp.begin(), tmp.end());
+				ans = max(ans, tmp[1]);
+			}
+			cout << ans << endl;
+		}
 
-	ans[n/2] = v[0];
-	ll count=0;
-	for (int i=1 ;i<n ; i++) {
-			if ((n/2)-i>=0)
-				ans[(n/2)-i]=v[i+count];
-			count++;
-			if ((n/2)+i<n)
-				ans[(n/2)+i]=v[i+count];
 	}
-
-	for (int i=0 ;i<ans.size() ; i++) {
-		cout << ans[i] << " ";
-	}
-	cout << endl;
 }
  
 int main() {
